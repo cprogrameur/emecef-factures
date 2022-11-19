@@ -1,0 +1,81 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" routerLink="/dashboard">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Factures Normalisées</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collap sed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+            aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Clients</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Les Clients:</h6>
+                <a class="collapse-item" routerLink="/clients/ajouter">Ajouter</a>
+                <a class="collapse-item" routerLink="/clients">Liste</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item" *ngIf="datas[0].role == 'superadmin'">
+        <a class="nav-link collap sed" href="#" data-toggle="collapse" data-target="#collapseThre" aria-expanded="true"
+            aria-controls="collapseThre">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Vendeurs</span>
+        </a>
+        <div id="collapseThre" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Utlisisateurs Autorisés:</h6>
+                <a class="collapse-item" routerLink="/users">Gestion</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item" *ngIf="datas[0].role == 'superadmin'">
+        <a class="nav-link collap sed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true"
+            aria-controls="collapseThree">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Factures</span>
+        </a>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Gestion des Factures:</h6>
+                <a class="collapse-item" routerLink="/factures/edit">Editer</a>
+                <a class="collapse-item" routerLink="/factures">journal</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item" *ngIf="datas[0].role == 'superadmin'">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsefour" aria-expanded="true"
+            aria-controls="collapsefour">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Produits et services</span>
+        </a>
+        <div id="collapsefour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Produits et services:</h6>
+                <a class="collapse-item" routerLink="/produits/ajouter">Ajouter</a>
+                <a class="collapse-item" routerLink="/produits">Liste</a>
+            </div>
+        </div>
+    </li>
+
+    <hr class="sidebar-divider">
+
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->
