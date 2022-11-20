@@ -10,6 +10,8 @@ const htmlToPdfmake = require("html-to-pdfmake");
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs
+import * as uuid from 'uuid';
+
 
 @Component({
    selector: 'app-gen-facture',
@@ -31,8 +33,8 @@ export class GenFactureComponent implements OnInit {
    montype: string = "TYPE DE FACTURE"
    monproduit: any = []
    mypay: any = []
-   monclient: any = { "ifu": "", "name": "", "contact": "", "address": "" }
-   message: string = "Merci de nous faire condiance. A très bientôt!!!"
+   monclient: any
+   message: string = "Merci de nous faire confiance. A très bientôt!!!"
    invoice: any = {
       "ifu": "0202225606476",//YOUR IFU HERE
       "type": "FV",
@@ -61,6 +63,7 @@ export class GenFactureComponent implements OnInit {
    taxGroups: any
    types: any = [];
    operator: any
+   invoiceId:string = ""
    constructor(private facture: FactureService, private userservice: AuthService, private router: Router, private fb: FormBuilder, private firebaseService: FirebaseService) {
       this.typeFacture = this.fb.group({
          type: ['', [Validators.required, Validators.maxLength(255)]],
@@ -88,13 +91,16 @@ export class GenFactureComponent implements OnInit {
    }
 
    ngOnInit(): void {
+      this.invoiceId = uuid.v4();
       this.facture.init()
+      this.operator = {ifu:this.userservice.getDatas("ifu"),id:this.userservice.getDatas("id")}
       this.invoiceHeader = JSON.parse(this.userservice.getDatas("invoiceHeader")!)
       this.firebaseService.getProduit(this.invoiceHeader.nim).subscribe(
          (res: any) => {
             this.monproduit = res
          }
       )
+      this.firebaseService.createFacture({id:this.invoiceId,ifGen:false})
       this.firebaseService.getClient(this.invoiceHeader.nim).subscribe(
          (res: any) => {
             if (res.length == 0) {
@@ -103,7 +109,6 @@ export class GenFactureComponent implements OnInit {
                this.monclient = res[0]
          }
       )
-      this.operator = { "name": "Test", "id": "" };
    }
    invoiceType() {
       if (this.type == "") {
@@ -123,20 +128,20 @@ export class GenFactureComponent implements OnInit {
       this.montype = type
       this.invoiceType()
    }
-   generate(products: any, payement: any, client: any, operator: any) {
-      this.facture.generate({
-         "ifu": "0202225606476",//YOUR IFU HERE
-         "type": "FV",
-         "items": products,
-         "operator": operator,
-         "client": client,
-         "payment": payement,
+   generate(products: any, payement: any, client: any, operator: any,message:string,type:string) {
+      if(confirm("Etes vous sûrs de vouloir générer la facture? Cette action est irréverssible")){
+         this.facture.generate({
+            "ifu": "0202225606476",//YOUR IFU HERE
+            "type": type,
+            "items": products,
+            "operator": operator,
+            "client": client,
+            "payment": payement
+         }
+         );
+         this.userservice.setDataInLocalStorage("message",message)
+         this.download()
       }
-      );
-      this.invoiceAmounts = JSON.parse(this.userservice.getDatas("invoiceAmounts")!)
-      this.invoicePayement = JSON.parse(this.userservice.getDatas("invoicePayement")!)
-      this.invoiceSecurity = JSON.parse(this.userservice.getDatas("invoiceSecurity")!)
-      this.download()
    }
    invoicemsgcom() {
       if (this.msgcom == "") {
@@ -165,7 +170,7 @@ export class GenFactureComponent implements OnInit {
    }
    onSubmitPay() {
       var type = this.Paiement.value
-      this.firebaseService.createPayement({ ...type, nim: this.invoiceHeader.nim })
+      this.firebaseService.createPayement({ ...type, invoiceId: this.invoiceId })
       this.firebaseService.getPayement(this.invoiceHeader.nim).subscribe(
          (res: any) => {
             this.mypay = res
@@ -182,7 +187,7 @@ export class GenFactureComponent implements OnInit {
    }
    onSubmitClient() {
       var type = this.Client.value
-      this.firebaseService.createClient({ ...type, nim: this.invoiceHeader.nim })
+      this.firebaseService.createClient({ ...type, invoiceId: this.invoiceId })
       this.firebaseService.getClient(this.invoiceHeader.nim).subscribe(
          (res: any) => {
             this.monclient = res[0]
@@ -200,7 +205,7 @@ export class GenFactureComponent implements OnInit {
    }
    onSubmitProd() {
       var type = this.Produit.value
-      this.firebaseService.createProduit({ ...type, nim: this.invoiceHeader.nim })
+      this.firebaseService.createProduit({ ...type, invoiceId: this.invoiceId })
       this.monproduit[this.monproduit.length] = type
       this.firebaseService.getProduit(this.invoiceHeader.nim).subscribe(
          (res: any) => {
@@ -210,21 +215,6 @@ export class GenFactureComponent implements OnInit {
       this.invoiceProd()
    }
    download() {
-      // const pdf = this.FACTURE.nativeElement;
-      // var html = htmlToPdfmake(pdf.innerHTML);
-      // console.log(pdf)
-      // const documentDefinition = { content: html }
-      // pdfMake.createPdf(documentDefinition).download()
-      let DATA: any = document.getElementById('invoice');
-      html2canvas(DATA).then((canvas) => {
-      let fileWidth = 208;
-      let fileHeight = (canvas.height * fileWidth) / canvas.width;
-      const FILEURI = canvas.toDataURL('image/png');
-      let PDF = new jsPDF('p', 'mm', 'a4');
-      let position = 0;
-      PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
-      PDF.save('angular-demo.pdf');
-    });
-      
+      window.open('mafacture', '_blank');
    }
 }

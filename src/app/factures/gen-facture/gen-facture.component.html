@@ -82,7 +82,7 @@
             <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Edition de facture</h1>
-                    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" (click)="generate(monproduit,mypay,monclient,operator)"><i
+                    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" (click)="generate(monproduit,mypay,monclient,operator,message,montype)" *ngIf="monproduit.length!=0 && mypay.length!=0 && monclient!=undefined"><i
                             class="fas fa-download fa-sm text-white-50" ></i> Générer</button>
                 </div>
                 <!-- DataTales Example -->
@@ -271,7 +271,7 @@
                                     </div>
                                     <div class="header"
                                         style="display:flex;flex-direction: row;justify-content: space-between;">
-                                        <div class="header_1">
+                                        <div class="header_1" >
                                             <ul *ngIf="invoicePayement.operator != null">
                                                 <li>
                                                     NOM Vendeur:{{invoicePayement.operator.name}}
@@ -280,10 +280,7 @@
                                             </ul>
                                         </div>
                                         <div class="header_2">
-                                            <ul>
-                                                <!-- <li>
-                                                    <h3>{{invoiceHeader.emcfList[0].shopName}}</h3>
-                                                </li> -->
+                                            <ul *ngIf="monclient!=undefined">
                                                 <li>IFU Cient:{{monclient.ifu}}</li>
                                                 <li>Nom Cient:{{monclient.name}}</li>
                                                 <li>Adresse
@@ -319,11 +316,11 @@
                                             </tr>
                                             <tr  *ngIf="invoiceAmounts.taa!=0 || invoiceAmounts.tac!=0 || invoiceAmounts.tae!=0 || invoiceAmounts.taf!=0">
                                                 <td colspan="3">SOUS-TOTAL (Exonéré)</td>
-                                                <td class="total">{{invoiceAmounts.hab+invoiceAmounts.had}}</td>
+                                                <td class="total">{{invoiceAmounts.taa+invoiceAmounts.tac+invoiceAmounts.tae+invoiceAmounts.taf}}</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="3">TAXE 18%</td>
-                                                <td class="total">{{invoiceAmounts.vab+invoiceAmounts.vab}}</td>
+                                                <td colspan="3" >TAXE 18%</td>
+                                                <td class="total">{{invoiceAmounts.vab+invoiceAmounts.vad}}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="grand total">GRAND TOTAL</td>
@@ -351,7 +348,7 @@
                                     <div id="notices">
                                         <div>Informations de sécurité:</div>
                                         <div class="notice"
-                                            style="display:flex;flex-direction: row;justify-content: space-between;" *ngIf="invoiceSecurity != null">
+                                            style="display:flex;flex-direction: row;justify-content: space-between;">
                                             <div>
                                                 <qrcode [qrdata]="invoiceSecurity.qrCode" [width]="150" [errorCorrectionLevel]="'M'"></qrcode>
                                             </div>
@@ -437,7 +434,7 @@
                     <div class="form-group">
                         <strong>Type de Facture: *</strong>
                         <select formControlName="type" class="form-control">
-                            <option *ngFor="let type of types" value="{{type.description}}">{{type.description}}
+                            <option *ngFor="let type of types" value="{{type.type}}">{{type.type}}
                             </option>
                         </select>
                     </div>
@@ -468,7 +465,6 @@
             </div>
         </div>
     </div>
-
 </div>
 <div class="{{prod}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
     <!-- DataTales Example -->

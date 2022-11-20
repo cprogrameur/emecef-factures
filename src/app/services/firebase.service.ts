@@ -12,26 +12,32 @@ export class FirebaseService {
   //création d'élément
 
   createUser(value: any) {
-    return this.db.collection('userDatas').add(value);
+    return this.db.collection('vendeurs').add(value);
   }
   createProduit(value: any) {
     return this.db.collection('produits_fac').add(value)
   }
   getProduit(nim: string) {
-    return this.db.collection('produits_fac', ref => ref.where("nim", '==', nim)).valueChanges({ idField: 'id' });
+    return this.db.collection('produits_fac', ref => ref.where("invoiceId", '==', nim)).valueChanges({ idField: 'id' });
   }
   createPayement(value: any) {
     return this.db.collection('paiements_fac').add(value)
   }
   getPayement(nim: string) {
-    return this.db.collection('paiements_fac', ref => ref.where("nim", '==', nim)).valueChanges({ idField: 'id' });
+    return this.db.collection('paiements_fac', ref => ref.where("invoiceId", '==', nim)).valueChanges({ idField: 'id' });
+  }
+  createFacture(value: any) {
+    return this.db.collection('factures').add(value)
+  }
+  getFacture(nim: string) {
+    return this.db.collection('factures', ref => ref.where("id", '==', nim)).valueChanges();
   }
   
   createClient(value: any) {
     return this.db.collection('clients_fac').add(value)
   }
   getClient(nim: string) {
-    return this.db.collection('clients_fac', ref => ref.where("nim", '==', nim)).valueChanges({ idField: 'id' });
+    return this.db.collection('clients_fac', ref => ref.where("invoiceId", '==', nim)).valueChanges({ idField: 'id' });
   }
   //supression d'élément
 

@@ -7,6 +7,7 @@ import { GenFactureComponent } from './factures/gen-facture/gen-facture.componen
 import { JournalFactureComponent } from './factures/journal-facture/journal-facture.component';
 import { FourOhFourComponent } from './four-oh-four/four-oh-four.component';
 import { LoginComponent } from './login/login.component';
+import { MafactureComponent } from './mafacture/mafacture.component';
 import { EditProduitComponent } from './produits/edit-produit/edit-produit.component';
 import { ModProduitComponent } from './produits/mod-produit/mod-produit.component';
 import { ProduitsComponent } from './produits/produits.component';
@@ -24,6 +25,9 @@ const routes: Routes = [
   },
   {
     path:'factures',component:JournalFactureComponent
+  },
+  {
+    path:'mafacture',component:MafactureComponent
   },
   {
     path:'login',component:LoginComponent

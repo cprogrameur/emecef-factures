@@ -28,6 +28,7 @@ import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { QRCodeModule } from 'angularx-qrcode';
+import { MafactureComponent } from './mafacture/mafacture.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     UtilisateursComponent,
     ProduitsComponent,
     EditProduitComponent,
-    ModProduitComponent
+    ModProduitComponent,
+    MafactureComponent
   ],
   imports: [
     BrowserModule,
