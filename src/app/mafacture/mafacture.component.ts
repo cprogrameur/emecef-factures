@@ -27,6 +27,7 @@ export class MafactureComponent implements OnInit {
       this.invoiceHeader = JSON.parse(this.userservice.getDatas("invoiceHeader")!)
       this.invoiceAmounts = JSON.parse(this.userservice.getDatas("invoiceAmounts")!)
       this.invoicePayement = JSON.parse(this.userservice.getDatas("invoicePayement")!)
+      console.log(this.invoicePayement)
       this.invoiceSecurity = JSON.parse(this.userservice.getDatas("invoiceSecurity")!)
       this.message = this.userservice.getDatas("message")!
      }}

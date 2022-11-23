@@ -8,7 +8,7 @@ import { FirebaseService } from '../services/firebase.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
 
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
       .then((result) => {
         this.afAuth.authState.subscribe((user) => {
           if (user) {
-            this.userService.setDataInLocalStorage('id', JSON.stringify(result));
+            this.userService.setDataInLocalStorage('id', user.uid);
             this.userService.setDataInLocalStorage('ifu', formValue.email);
             this.router.navigate(['dashboard']);
           }else{

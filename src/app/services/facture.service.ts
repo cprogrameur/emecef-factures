@@ -83,22 +83,25 @@ export class FactureService implements OnInit {
     let headers = new HttpHeaders
       ({
         'Content-Type': 'application/json',
-        // 'Authorization':'Bearer EYJHBGCIOIJIUZI1NIISINR5CCI6IKPXVCJ9.EYJ1BMLXDWVFBMFTZSI6IJAYMDIYMJU2MDY0NZZ8VFMWMTAWNDU1NSISINJVBGUIOIJUYXHWYXLLCIISIM5IZII6MTY2ODU4ODAWNSWIZXHWIJOXNJG0MJI2NDA1LCJPYXQIOJE2NJG1ODGWMDUSIMLZCYI6IMLTCG90CY5IAIISIMF1ZCI6IMLTCG90CY5IAIJ9.BUUF5IVSEVSMBWYNFAFBFEOPB6GSKNITRUNQ2IMZCMQ',
       });
     const options = { headers: headers };
     return this._http.get(`${this.base}` + `info/status`, options)
   }
   generate(invoice: any) {
+    console.log(invoice)
     this.postInvoiceRequestDto(invoice).subscribe(
       (res: any) => {
         this.userservice.setDataInLocalStorage('invoiceAmounts', JSON.stringify(res))
+        console.log(res)
         var uid = res.uid
         this.getInvoiceDetailsDto(res.uid).subscribe(
           (res: any) => {
             this.userservice.setDataInLocalStorage('invoicePayement', JSON.stringify(res))
+            console.log(res)
             this.putFinalize(uid).subscribe(
               (res: any) => {
                 this.userservice.setDataInLocalStorage('invoiceSecurity', JSON.stringify(res))
+                console.log(res)
               }
             )
           }

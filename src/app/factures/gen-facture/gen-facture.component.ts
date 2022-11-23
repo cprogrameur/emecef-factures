@@ -6,9 +6,6 @@ import { FactureService } from 'src/app/services/facture.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import * as pdfMake from "pdfmake/build/pdfmake"
 import * as pdfFonts from "pdfmake/build/vfs_fonts"
-const htmlToPdfmake = require("html-to-pdfmake");
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs
 import * as uuid from 'uuid';
 
@@ -63,7 +60,7 @@ export class GenFactureComponent implements OnInit {
    taxGroups: any
    types: any = [];
    operator: any
-   invoiceId:string = ""
+   invoiceId: string = ""
    constructor(private facture: FactureService, private userservice: AuthService, private router: Router, private fb: FormBuilder, private firebaseService: FirebaseService) {
       this.typeFacture = this.fb.group({
          type: ['', [Validators.required, Validators.maxLength(255)]],
@@ -93,14 +90,13 @@ export class GenFactureComponent implements OnInit {
    ngOnInit(): void {
       this.invoiceId = uuid.v4();
       this.facture.init()
-      this.operator = {ifu:this.userservice.getDatas("ifu"),id:this.userservice.getDatas("id")}
+      this.operator = { name: this.userservice.getDatas("ifu"), id: this.userservice.getDatas("id") }
       this.invoiceHeader = JSON.parse(this.userservice.getDatas("invoiceHeader")!)
       this.firebaseService.getProduit(this.invoiceHeader.nim).subscribe(
          (res: any) => {
             this.monproduit = res
          }
       )
-      this.firebaseService.createFacture({id:this.invoiceId,ifGen:false})
       this.firebaseService.getClient(this.invoiceHeader.nim).subscribe(
          (res: any) => {
             if (res.length == 0) {
@@ -128,19 +124,44 @@ export class GenFactureComponent implements OnInit {
       this.montype = type
       this.invoiceType()
    }
-   generate(products: any, payement: any, client: any, operator: any,message:string,type:string) {
-      if(confirm("Etes vous sûrs de vouloir générer la facture? Cette action est irréverssible")){
-         this.facture.generate({
-            "ifu": "0202225606476",//YOUR IFU HERE
-            "type": type,
+   generate(products: any, payement: any, client: any, operator: any, message: string, type: string) {
+      if (confirm("Etes vous sûrs de vouloir générer la facture? Cette action est irréverssible")) {
+         this.facture.generate(
+         //    {
+         //    "ifu": "0202225606476",//YOUR IFU HERE
+         //    "type": type,
+         //    "aib": "A",
+         //    "items": products,
+         //    "operator": operator,
+         //    "client": client,
+         //    "payment": payement
+         // }
+         {
+            "ifu": "0202225606476",
+            "aib": "A",
+            "type": "FV",
             "items": products,
-            "operator": operator,
             "client": client,
-            "payment": payement
-         }
+            "operator": operator,
+            "payment": [
+               {"name":payement.type,"amount":payement.montant},
+            ]
+            "reference": "string"
+          }
          );
-         this.userservice.setDataInLocalStorage("message",message)
-         this.download()
+         console.log(type)
+         this.userservice.setDataInLocalStorage("message", message)
+         this.firebaseService.createFacture({
+            id: this.invoiceId, invoiceHeader: JSON.parse(this.userservice.getDatas("invoiceHeader")!),
+            invoiceAmounts: JSON.parse(this.userservice.getDatas("invoiceAmounts")!),
+            invoicePayement: JSON.parse(this.userservice.getDatas("invoicePayement")!),
+            invoiceSecurity: JSON.parse(this.userservice.getDatas("invoiceSecurity")!),
+            message: this.userservice.getDatas("message")!
+         }).then(
+            (res:any)=>{
+               this.download()
+            }
+         )
       }
    }
    invoicemsgcom() {
@@ -152,7 +173,6 @@ export class GenFactureComponent implements OnInit {
    }
    onSubmitMsgCom() {
       var type = this.Message.value.message
-      // this.userservice.setDataInLocalStorage("invoiceType",type)
       this.message = type
       this.invoicemsgcom()
    }
@@ -163,6 +183,7 @@ export class GenFactureComponent implements OnInit {
          this.facture.getPaymentType().subscribe(
             (res: any) => {
                this.types = res
+               console.log(this.types)
             }
          )
          this.pay = ""
@@ -171,9 +192,10 @@ export class GenFactureComponent implements OnInit {
    onSubmitPay() {
       var type = this.Paiement.value
       this.firebaseService.createPayement({ ...type, invoiceId: this.invoiceId })
-      this.firebaseService.getPayement(this.invoiceHeader.nim).subscribe(
+      this.firebaseService.getPayement(this.invoiceId).subscribe(
          (res: any) => {
             this.mypay = res
+            console.log(this.mypay)
          }
       )
       this.invoicePay()
@@ -188,7 +210,7 @@ export class GenFactureComponent implements OnInit {
    onSubmitClient() {
       var type = this.Client.value
       this.firebaseService.createClient({ ...type, invoiceId: this.invoiceId })
-      this.firebaseService.getClient(this.invoiceHeader.nim).subscribe(
+      this.firebaseService.getClient(this.invoiceId).subscribe(
          (res: any) => {
             this.monclient = res[0]
             console.log(this.monclient)
@@ -207,9 +229,10 @@ export class GenFactureComponent implements OnInit {
       var type = this.Produit.value
       this.firebaseService.createProduit({ ...type, invoiceId: this.invoiceId })
       this.monproduit[this.monproduit.length] = type
-      this.firebaseService.getProduit(this.invoiceHeader.nim).subscribe(
+      this.firebaseService.getProduit(this.invoiceId).subscribe(
          (res: any) => {
             this.monproduit = res
+            console.log(this.monproduit)
          }
       )
       this.invoiceProd()

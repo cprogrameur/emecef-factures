@@ -451,7 +451,7 @@
     <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
         <div class="card shadow" style="width: 90%;margin: auto;">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Type de Facture</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Message commercial</h6>
             </div>
             <div class="card-body">
                 <form [formGroup]="Message" class="col" (ngSubmit)="onSubmitMsgCom()">
@@ -471,7 +471,7 @@
     <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
         <div class="card shadow" style="width: 90%;margin: auto;">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Type de Facture</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Ajout de Produits</h6>
             </div>
             <div class="card-body">
                 <form [formGroup]="Produit" class="col" (ngSubmit)="onSubmitProd()">
@@ -490,21 +490,21 @@
                     <div class="form-group">
                         <strong>TaxGroup: *</strong>
                         <select formControlName="taxGroup" class="form-control">
-                            <option>a
+                            <option value="a">a
                             </option>
-                            <option>b
+                            <option value="b">b
                             </option>
-                            <option>c
+                            <option value="c">c
                             </option>
-                            <option>d
+                            <option value="d">d
                             </option>
-                            <option>e
+                            <option value="e">e
                             </option>
-                            <option>f
+                            <option value="f">f
                             </option>
-                            <option>aibA
+                            <option value="aibA">aibA
                             </option>
-                            <option>aibB
+                            <option value="aibB">aibB
                             </option>
                         </select>
                     </div>
@@ -521,7 +521,7 @@
     <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
         <div class="card shadow" style="width: 90%;margin: auto;">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Type de Facture</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Ajout de Clients:</h6>
             </div>
             <div class="card-body">
                 <form [formGroup]="Client" class="col" (ngSubmit)="onSubmitClient()">
@@ -554,20 +554,20 @@
     <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
         <div class="card shadow" style="width: 90%;margin: auto;">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Type de Facture</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Modalités de paiement:</h6>
             </div>
             <div class="card-body">
-                <form [formGroup]="Produit" class="col" (ngSubmit)="onSubmitPay()">
+                <form [formGroup]="Paiement" class="col" (ngSubmit)="onSubmitPay()">
                     <div class="form-group">
                         <strong>Type: *</strong>
-                        <select formControlName="taxGroup" class="form-control">
-                            <option *ngFor="let type of types">{{type.type}}
+                        <select formControlName="type" class="form-control">
+                            <option *ngFor="let type of types" value="{{type.type}}">{{type.type}}
                             </option>
                         </select>
                     </div>
                     <div class="form-group">
                         <strong>Montant: *</strong>
-                        <input formControlName="price" type="number" class="form-control">
+                        <input formControlName="montant" type="number" class="form-control">
                     </div>
                     <button class="btn btn-danger" type="button" (click)="invoicePay()">Annuler</button>
                     <button class="btn btn-primary" type="submit">OK</button>

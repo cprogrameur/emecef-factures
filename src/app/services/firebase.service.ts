@@ -32,6 +32,9 @@ export class FirebaseService {
   getFacture(nim: string) {
     return this.db.collection('factures', ref => ref.where("id", '==', nim)).valueChanges();
   }
+  getFactures() {
+    return this.db.collection('factures').valueChanges();
+  }
   
   createClient(value: any) {
     return this.db.collection('clients_fac').add(value)
