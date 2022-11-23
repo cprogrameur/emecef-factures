@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
         this.afAuth.authState.subscribe((user) => {
           if (user) {
             this.userService.setDataInLocalStorage('id', user.uid);
-            this.userService.setDataInLocalStorage('ifu', formValue.email);
+            this.userService.setDataInLocalStorage('name', formValue.email);
             this.router.navigate(['dashboard']);
           }else{
             this.router.navigate(['login'])

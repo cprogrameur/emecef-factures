@@ -97,11 +97,9 @@ export class FactureService implements OnInit {
         this.getInvoiceDetailsDto(res.uid).subscribe(
           (res: any) => {
             this.userservice.setDataInLocalStorage('invoicePayement', JSON.stringify(res))
-            console.log(res)
             this.putFinalize(uid).subscribe(
               (res: any) => {
                 this.userservice.setDataInLocalStorage('invoiceSecurity', JSON.stringify(res))
-                console.log(res)
               }
             )
           }
@@ -120,4 +118,5 @@ export class FactureService implements OnInit {
       }
     );
   };
+
 }

@@ -65,7 +65,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let prod of invoicePayement.produit" style="border-bottom: 5px solid black;">
+                    <tr *ngFor="let prod of invoicePayement.items" style="border-bottom: 1px solid black;">
                         <td class="service">{{prod.name}}</td>
                         <td class="unit">{{prod.price}}</td>
                         <td class="qty">{{prod.quantity}}</td>
@@ -101,7 +101,7 @@
                     </tr>
                 </thead>
                 <tbody *ngIf="invoicePayement.payment != null">
-                    <tr *ngFor="let payement of invoicePayement.payment" style="border-bottom: 2px solid black;">
+                    <tr *ngFor="let payement of invoicePayement.payment" style="border-bottom: 1px solid black;">
                         <td class="service">{{payement.name}}</td>
                         <td class="unit">{{payement.amount}}</td>
                     </tr>

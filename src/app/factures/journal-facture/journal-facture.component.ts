@@ -11,7 +11,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class JournalFactureComponent implements OnInit {
   factures: any = [];
-  constructor(private userservice: AuthService, private router: Router, private fb: FormBuilder, private firebaseService: FirebaseService) {
+  constructor(private userservice: AuthService, private firebaseService: FirebaseService) {
      
    }
 

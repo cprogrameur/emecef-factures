@@ -25,7 +25,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Les Clients:</h6>
                     <a class="collapse-item" style="cursor:pointer" (click)="invoiceClient()">Ajouter</a>
-                    <a class="collapse-item" style="cursor:pointer">Modifier</a>
+                    <a class="collapse-item" style="cursor:pointer" (click)="invoiceClientList()">Gérer</a>
                 </div>
             </div>
         </li>
@@ -40,8 +40,22 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Détails:</h6>
                     <a class="collapse-item" style="cursor: pointer;" (click)="invoiceType()">Type de Facture</a>
-                    <a class="collapse-item" style="cursor: pointer;" (click)="invoicePay()">Type de Paiement</a>
                     <a class="collapse-item" style="cursor: pointer;" (click)="invoicemsgcom()">Message commercial</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link collap sed" href="#" data-toggle="collapse" data-target="#collapseThre"
+                aria-expanded="true" aria-controls="collapseThre">
+                <i class="fas fa-fw fa-book"></i>
+                <span>Paiements</span>
+            </a>
+            <div id="collapseThre" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Types de Paiements:</h6>
+                    <a class="collapse-item" style="cursor: pointer;" (click)="invoicePay()">Type de Paiement</a>
+                    <a class="collapse-item" style="cursor: pointer;" (click)="invoicePayList()">Gérer</a>
                 </div>
             </div>
         </li>
@@ -56,7 +70,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Produits et services:</h6>
                     <a class="collapse-item" style="cursor: pointer;" (click)="invoiceProd()">Ajouter</a>
-                    <a class="collapse-item" style="cursor: pointer;">Gérer</a>
+                    <a class="collapse-item" style="cursor: pointer;" (click)="invoiceProdList()">Gérer</a>
                 </div>
             </div>
         </li>
@@ -304,7 +318,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let prod of monproduit" style="border-bottom: 5px solid black;">
+                                            <tr *ngFor="let prod of monproduit" style="border-bottom: 1px solid black;">
                                                 <td class="service">{{prod.name}}</td>
                                                 <td class="unit">{{prod.price}}</td>
                                                 <td class="qty">{{prod.quantity}}</td>
@@ -339,7 +353,7 @@
                                             </tr>
                                         </thead>
                                         <tbody *ngIf="invoicePayement.payment != null">
-                                            <tr *ngFor="let payement of invoicePayement.payment" style="border-bottom: 2px solid black;">
+                                            <tr *ngFor="let payement of invoicePayement.payment" style="border-bottom: 1px solid black;">
                                                 <td class="service">{{payement.name}}</td>
                                                 <td class="unit">{{payement.amount}}</td>
                                             </tr>
@@ -422,6 +436,7 @@
         </div>
     </div>
 </div>
+
 <div class="{{type}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
     <!-- DataTales Example -->
     <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
@@ -444,7 +459,6 @@
             </div>
         </div>
     </div>
-
 </div>
 <div class="{{msgcom}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
     <!-- DataTales Example -->
@@ -466,6 +480,7 @@
         </div>
     </div>
 </div>
+
 <div class="{{prod}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
     <!-- DataTales Example -->
     <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
@@ -572,6 +587,214 @@
                     <button class="btn btn-danger" type="button" (click)="invoicePay()">Annuler</button>
                     <button class="btn btn-primary" type="submit">OK</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="{{mod_prod}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
+    <!-- DataTales Example -->
+    <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
+        <div class="card shadow" style="width: 90%;margin: auto;">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Modification de Produits</h6>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="ProduitMod" class="col" (ngSubmit)="onSubmitProdMod(userservice.getDatas('ref')!)">
+                    <div class="form-group">
+                        <strong>Nom: *</strong>
+                        <input formControlName="name" class="form-control" >
+                    </div>
+                    <div class="form-group">
+                        <strong>Prix: *</strong>
+                        <input formControlName="price" type="number" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <strong>Quantité: *</strong>
+                        <input formControlName="quantity" type="number" class="form-control" value="monproduitmod.quantity">
+                    </div>
+                    <div class="form-group">
+                        <strong>TaxGroup: *</strong>
+                        <select formControlName="taxGroup" class="form-control" >
+                            <option value="a">a
+                            </option>
+                            <option value="b">b
+                            </option>
+                            <option value="c">c
+                            </option>
+                            <option value="d">d
+                            </option>
+                            <option value="e">e
+                            </option>
+                            <option value="f">f
+                            </option>
+                            <option value="aibA">aibA
+                            </option>
+                            <option value="aibB">aibB
+                            </option>
+                        </select>
+                    </div>
+                    <button class="btn btn-danger" type="button" (click)="invoiceProdMod('','')">Annuler</button>
+                    <button class="btn btn-primary" type="submit">OK</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="{{mod_client}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
+    <!-- DataTales Example -->
+    <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
+        <div class="card shadow" style="width: 90%;margin: auto;">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Modification de Clients:</h6>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="ClientMod" class="col" (ngSubmit)="onSubmitClientMod(userservice.getDatas('ref')!)">
+                    <div class="form-group">
+                        <strong>IFU: *</strong>
+                        <input formControlName="ifu" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <strong>Nom: *</strong>
+                        <input formControlName="name" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <strong>Contact: *</strong>
+                        <input formControlName="contact" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <strong>Adresse: *</strong>
+                        <input formControlName="address" type="text" class="form-control">
+                    </div>
+                    <button class="btn btn-danger" type="button" (click)="invoiceClientMod('','')">Annuler</button>
+                    <button class="btn btn-primary" type="submit">OK</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="{{mod_pay}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
+    <!-- DataTales Example -->
+    <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
+        <div class="card shadow" style="width: 90%;margin: auto;">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Modification Modalité de paiement:</h6>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="PaiementMod" class="col" (ngSubmit)="onSubmitPayMod(userservice.getDatas('ref')!)">
+                    <div class="form-group">
+                        <strong>Type: *</strong>
+                        <select formControlName="type" class="form-control">
+                            <option *ngFor="let type of types" value="{{type.type}}">{{type.type}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <strong>Montant: *</strong>
+                        <input formControlName="montant" type="number" class="form-control">
+                    </div>
+                    <button class="btn btn-danger" type="button" (click)="invoicePayMod('','')">Annuler</button>
+                    <button class="btn btn-primary" type="submit">OK</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="{{list_prod}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
+    <!-- DataTales Example -->
+    <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
+        <div class="card shadow" style="width: 90%;margin: auto;">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Liste des Produits</h6>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td>Nom</td>
+                        <td>Prix</td>
+                        <td>Quantité</td>
+                        <td>TaxGroup</td>
+                        <td>Total</td>
+                        <td>Action</td>
+                    </tr>
+
+                    <tr *ngFor="let produit of monproduitlist">
+                        <td>{{produit.name}}</td>
+                        <td>{{produit.price}}</td>
+                        <td>{{produit.quantity}}</td>
+                        <td>{{produit.taxGroup}}</td>
+                        <td>{{produit.price*produit.quantity}}</td>
+                        <td><button (click)="invoiceProdMod(produit.ref,produit)">Modifier</button></td>
+                    </tr>
+                </table>
+                <button class="btn btn-danger" type="button" (click)="invoiceProdList()">Annuler</button>
+                <button class="btn btn-primary" type="submit">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="{{list_client}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
+    <!-- DataTales Example -->
+    <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
+        <div class="card shadow" style="width: 90%;margin: auto;">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Liste des Clients</h6>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td>IFU</td>
+                        <td>Nom</td>
+                        <td>Contact</td>
+                        <td>Adresse</td>
+                        <td>Action</td>
+                    </tr>
+
+                    <tr *ngFor="let client of monclientlist">
+                        <td>{{client.ifu}}</td>
+                        <td>{{client.name}}</td>
+                        <td>{{client.contact}}</td>
+                        <td>{{client.address}}</td>
+                        <td><button (click)="invoiceClientMod(client.ref,client)">Modifier</button></td>
+                    </tr>
+                </table>
+                <button class="btn btn-danger" type="button" (click)="invoiceClientList()">Annuler</button>
+                <button class="btn btn-primary" type="submit">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="{{list_pay}}" style="position: absolute;top:0;width: 100%;z-index: 200;">
+    <!-- DataTales Example -->
+    <div class="pt-5" style="width: 100%;background-color: rgba(0,0,0,.5);height: 100vh;">
+        <div class="card shadow" style="width: 90%;margin: auto;">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Liste des Modalités de paiement:</h6>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <td>Nom</td>
+                        <td>Prix</td>
+                        <td>Quantité</td>
+                        <td>TaxGroup</td>
+                        <td>Total</td>
+                        <td>Action</td>
+                    </tr>
+
+                    <tr *ngFor="let pay of mypaylist">
+                        <td>{{pay.name}}</td>
+                        <td>{{pay.price}}</td>
+                        <td><button (click)="invoicePayMod(pay.ref,pay)">Modifier</button></td>
+                    </tr>
+                </table>
+                <button class="btn btn-danger" type="button" (click)="invoicePayList()">Annuler</button>
+                <button class="btn btn-primary" type="submit">OK</button>
             </div>
         </div>
     </div>
