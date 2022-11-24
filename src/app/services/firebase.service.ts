@@ -20,6 +20,9 @@ export class FirebaseService {
   getProduit(nim: string) {
     return this.db.collection('produits_fac', ref => ref.where("invoiceId", '==', nim)).valueChanges({ idField: 'ref' });
   }
+  getVendeurs() {
+    return this.db.collection('vendeurs').valueChanges({ idField: 'ref' });
+  }
   createPayement(value: any) {
     return this.db.collection('paiements_fac').add(value)
   }
@@ -45,6 +48,9 @@ export class FirebaseService {
 
   deleteProduit(id: any) {
     return this.db.collection("produits_fac").doc(id).delete();
+  }
+  delete(id: any) {
+    return this.db.collection("vendeurs").doc(id).delete();
   }
   deletePaiement(id: any) {
     return this.db.collection("paiements_fac").doc(id).delete();

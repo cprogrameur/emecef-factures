@@ -12,7 +12,10 @@ import { EditProduitComponent } from './produits/edit-produit/edit-produit.compo
 import { ModProduitComponent } from './produits/mod-produit/mod-produit.component';
 import { ProduitsComponent } from './produits/produits.component';
 import { SignupComponent } from './signup/signup.component';
+import { AngularFireAuthGuard, redirectUnauthorizedTo } from '@angular/fire/compat/auth-guard';
+import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
 
+const redirect = ()=> redirectUnauthorizedTo(['login'])
 const routes: Routes = [
   {
     path:'not-found',component:FourOhFourComponent
@@ -21,13 +24,13 @@ const routes: Routes = [
     path:'',redirectTo:'/dashboard',pathMatch:'full'
   },
   {
-    path:'dashboard',component:DashboardComponent
+    path:'dashboard',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:DashboardComponent
   },
   {
-    path:'factures',component:JournalFactureComponent
+    path:'factures',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:JournalFactureComponent
   },
   {
-    path:'mafacture',component:MafactureComponent
+    path:'mafacture',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:MafactureComponent
   },
   {
     path:'login',component:LoginComponent
@@ -36,25 +39,28 @@ const routes: Routes = [
     path:'signup',component:SignupComponent
   },
   {
-    path:'factures/edit',component:GenFactureComponent
+    path:'factures/edit',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:GenFactureComponent
   },
   {
-    path:'produits',component:ProduitsComponent
+    path:'users',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:UtilisateursComponent
   },
   {
-    path:'produits/ajouter',component:EditProduitComponent
+    path:'produits',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:ProduitsComponent
   },
   {
-    path:'produits/modifier',component:ModProduitComponent
+    path:'produits/ajouter',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:EditProduitComponent
   },
   {
-    path:'clients',component:DashboardComponent
+    path:'produits/modifier',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:ModProduitComponent
   },
   {
-    path:'clients/modifier',component:ModifierComponent
+    path:'clients',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:DashboardComponent
   },
   {
-    path:'clients/ajouter',component:AjouterComponent
+    path:'clients/modifier',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:ModifierComponent
+  },
+  {
+    path:'clients/ajouter',canActivate:[AngularFireAuthGuard],data:{authGuardPipe:redirect},component:AjouterComponent
   },
   {
     path:'**',redirectTo:'/not-found',pathMatch:'full'

@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "umo-facture",
+    "umo": "umo-facture"
+  },
+  "targets": {},
+  "etags": {}
+}

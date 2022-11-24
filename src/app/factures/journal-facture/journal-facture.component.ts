@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -11,7 +12,9 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class JournalFactureComponent implements OnInit {
   factures: any = [];
-  constructor(private userservice: AuthService, private firebaseService: FirebaseService) {
+  constructor(private userservice: AuthService,    private router: Router,
+    public afAuth: AngularFireAuth,
+    private firebaseService: FirebaseService) {
      
    }
 
@@ -19,6 +22,14 @@ export class JournalFactureComponent implements OnInit {
     this.firebaseService.getFactures().subscribe(
       (res:any)=>{
         this.factures = res
+      }
+    )
+  }
+  logout(){
+    this.userservice.clearStorage();
+    return this.afAuth.signOut().then(
+      ()=>{
+        this.router.navigate(['login'])
       }
     )
   }

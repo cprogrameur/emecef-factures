@@ -116,9 +116,13 @@ export class AjouterComponent implements OnInit {
     })
   }
 
-  logout() {
+  logout(){
     this.userService.clearStorage();
-    this.router.navigate(['/login'])
+    return this.afAuth.signOut().then(
+      ()=>{
+        this.router.navigate(['login'])
+      }
+    )
   }
   onSubmit() {
 

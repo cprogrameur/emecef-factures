@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -94,6 +95,7 @@ export class ModifierComponent implements OnInit {
     private firebaseService: FirebaseService,
     private fb: FormBuilder,
     private router: Router,
+    public afAuth: AngularFireAuth,
     private userService: AuthService,
   ) {
     this.modifierApprenant = this.fb.group({
@@ -109,9 +111,13 @@ export class ModifierComponent implements OnInit {
     })
   }
 
-  logout() {
+  logout(){
     this.userService.clearStorage();
-    this.router.navigate(['/login'])
+    return this.afAuth.signOut().then(
+      ()=>{
+        this.router.navigate(['login'])
+      }
+    )
   }
   onSubmit() {
     this.router.navigate(['apprenants'])

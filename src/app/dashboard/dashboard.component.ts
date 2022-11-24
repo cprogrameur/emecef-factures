@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -11,7 +12,7 @@ import { FirebaseService } from '../services/firebase.service';
 })
 export class DashboardComponent implements OnInit {
   factures: any = [];
-  constructor(private userservice: AuthService, private router: Router, private fb: FormBuilder, private firebaseService: FirebaseService) {
+  constructor(private userservice: AuthService,public afAuth:AngularFireAuth, private router: Router, private fb: FormBuilder, private firebaseService: FirebaseService) {
      
    }
 
@@ -31,4 +32,12 @@ export class DashboardComponent implements OnInit {
     window.open('mafacture', '_blank');
   }
 
+  logout(){
+    this.userservice.clearStorage();
+    return this.afAuth.signOut().then(
+      ()=>{
+        this.router.navigate(['login'])
+      }
+    )
+  }
 }
