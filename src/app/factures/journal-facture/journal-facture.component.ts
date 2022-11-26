@@ -15,7 +15,6 @@ export class JournalFactureComponent implements OnInit {
   constructor(private userservice: AuthService,    private router: Router,
     public afAuth: AngularFireAuth,
     private firebaseService: FirebaseService) {
-     
    }
 
   ngOnInit(): void {

@@ -25,8 +25,10 @@ export class GenFactureComponent implements OnInit {
    public Produit!: FormGroup;
    public ProduitMod!: FormGroup;
    public Message!: FormGroup;
+   public Aib!: FormGroup;
    type: string = "d-none"
    msgcom: string = "d-none"
+   aib: string = "d-none"
    prod: string = "d-none"
    mod_prod: string = "d-none"
    list_prod: string = "d-none"
@@ -36,6 +38,7 @@ export class GenFactureComponent implements OnInit {
    client: string = "d-none"
    list_client: string = "d-none"
    mod_client: string = "d-none"
+   mod_aib: string = "d-none"
    montype: string = "TYPE DE FACTURE"
    monproduit: any = []
    monproduitmod: any = {}
@@ -47,6 +50,7 @@ export class GenFactureComponent implements OnInit {
    monclientmod: any = {}
    monclientlist: any
    message: string = "Merci de nous faire confiance. A très bientôt!!!"
+   monaib: string = ""
    invoice: any = {
       "ifu": "0202225606476",//YOUR IFU HERE
       "type": "FV",
@@ -117,9 +121,12 @@ export class GenFactureComponent implements OnInit {
             quantity: [this.monproduitmod.quantity, [Validators.required, Validators.maxLength(255)]],
             taxGroup: [this.monproduitmod.taxGroup, [Validators.required, Validators.maxLength(255)]],
          })
-      this.Message = this.fb.group({
-         message: ['', [Validators.required, Validators.maxLength(255)]],
-      })
+         this.Message = this.fb.group({
+            message: ['', [Validators.required, Validators.maxLength(255)]],
+         })
+         this.Aib = this.fb.group({
+            aib: ['', [Validators.required, Validators.maxLength(255)]],
+         })
    }
 
    ngOnInit(): void {
@@ -159,18 +166,24 @@ export class GenFactureComponent implements OnInit {
       this.montype = type
       this.invoiceType()
    }
-   generate(products: any, payement: any, client: any, operator: any, message: string, type: string) {
+   generate(products: any, payement: any, client: any, operator: any, message: string, type: string,aib:string) {
       if (confirm("Etes vous sûrs de vouloir générer la facture? Cette action est irréverssible")) {
-         this.facture.generate(
+         this.facture.generate(aib == ""?
             {
                "ifu": "0202225606476",
-               "aib": "A",
                "type": type,
                "items": this.tabProduit(products),
                "client": this.tabClient(client),
                "operator": operator,
-               "payment": this.tabPay(payement),
-               "reference": this.invoiceId
+               "payment": this.tabPay(payement)
+            }:{
+               "ifu": "0202225606476",
+               "type": type,
+               "aib":aib,
+               "items": this.tabProduit(products),
+               "client": this.tabClient(client),
+               "operator": operator,
+               "payment": this.tabPay(payement)
             }
          );
          console.log(this.tabPay(payement))
@@ -183,6 +196,13 @@ export class GenFactureComponent implements OnInit {
             message: this.userservice.getDatas("message")!
          }).then(
             (res: any) => {
+               console.log({
+                  id: this.invoiceId, invoiceHeader: JSON.parse(this.userservice.getDatas("invoiceHeader")!),
+                  invoiceAmounts: JSON.parse(this.userservice.getDatas("invoiceAmounts")!),
+                  invoicePayement: JSON.parse(this.userservice.getDatas("invoicePayement")!),
+                  invoiceSecurity: JSON.parse(this.userservice.getDatas("invoiceSecurity")!),
+                  message: this.userservice.getDatas("message")!
+               })
                this.download()
             }
          )
@@ -199,6 +219,18 @@ export class GenFactureComponent implements OnInit {
       var type = this.Message.value.message
       this.message = type
       this.invoicemsgcom()
+   }
+   invoiceaib() {
+      if (this.aib == "") {
+         this.aib = "d-none"
+      } else {
+         this.aib = ""
+      }
+   }
+   onSubmitAib() {
+      var type = this.Aib.value.aib
+      this.monaib = type
+      this.invoiceaib()
    }
    invoicePay() {
       if (this.pay == "") {

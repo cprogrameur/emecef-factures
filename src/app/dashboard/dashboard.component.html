@@ -26,7 +26,6 @@
                         <table class="table table-primary">
                             <tr>
                                 <td>Id</td>
-                                <td>IFU Vendeur</td>
                                 <td>ID Vendeur</td>
                                 <td>Date</td>
                                 <td>Total</td>
@@ -35,11 +34,10 @@
 
                             <tr *ngFor="let facture of factures">
                                 <td>{{facture.id}}</td>
-                                <td>{{facture.invoicePayement.operator.ifu}}</td>
                                 <td>{{facture.invoicePayement.operator.id}}</td>
                                 <td>{{facture.invoiceSecurity.dateTime}}</td>
                                 <td>{{facture.invoiceAmounts.total}}</td>
-                                <td><button (click)="generate(facture)">Imprimer</button></td>
+                                <td><button (click)="generate(facture)" class="btn btn-primary">Imprimer</button></td>
                             </tr>
                         </table>
                     </div>
